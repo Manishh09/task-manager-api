@@ -1,4 +1,4 @@
-# Task Management API
+# Task Manager API
 
 This is a simple RESTful API for managing tasks, built with Node.js and Express. It allows you to create, read, update, and delete tasks.
 
