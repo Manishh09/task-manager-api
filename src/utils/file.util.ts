@@ -6,7 +6,7 @@ const filePath = path.join(__dirname, '../data/tasks.json');
 
 export const readTasksFromFile = async () => {
   const data = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(data);
+  return JSON.parse(data).tasks as Task[];
 };
 
 export const writeTasksToFile = async (tasks: Task[]) => {

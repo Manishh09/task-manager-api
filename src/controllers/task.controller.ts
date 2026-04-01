@@ -41,9 +41,9 @@ export const createTask = async (req: Request, res: Response) => {
 // Update an existing task
 export const updateTask = async (req: Request, res: Response) => {
   const id = Number(req.params.id);
-  const { completed } = req.body;
+  const task = req.body;
 
-  const updatedTask = await taskService.updateTask(id, completed);
+  const updatedTask = await taskService.updateTask(id, task);
 
   if (!updatedTask) {
     throw { status: 404, message: 'Task not found' };

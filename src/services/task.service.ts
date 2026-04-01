@@ -14,7 +14,7 @@ export const getTasks = async (): Promise<Task[]> => {
 // Create a new task
 export const createTask = async (title: string): Promise<Task> => {
   const tasks = await readTasksFromFile();
-
+  
   const newTask: Task = {
     id: tasks.length + 1,
     title,
@@ -22,8 +22,7 @@ export const createTask = async (title: string): Promise<Task> => {
     createdAt: new Date()
   };
 
-  tasks.push(newTask);
-  await writeTasksToFile(tasks);
+  await writeTasksToFile([...tasks, newTask]);
 
   return newTask;
 };
@@ -31,19 +30,24 @@ export const createTask = async (title: string): Promise<Task> => {
 // Update an existing task
 export const updateTask = async (
   id: number,
-  completed: boolean
+  updates: Task
 ): Promise<Task | null> => {
   const tasks = await readTasksFromFile();
 
-  const task = tasks.find((t: Task) => t.id === id);
+  const index = tasks.findIndex((t: Task) => t.id === id);
 
-  if (!task) return null;
+  if (index === -1) return null;
 
-  task.completed = completed;
+  const updatedTask: Task = {
+    ...tasks[index],
+    ...updates
+  };
+
+  tasks[index] = updatedTask;
 
   await writeTasksToFile(tasks);
 
-  return task;
+  return updatedTask;
 };
 
 // Delete a task
