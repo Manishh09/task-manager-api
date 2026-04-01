@@ -8,6 +8,10 @@ import * as taskService from '../services/task.service';
 export const getTasks = async (req: Request, res: Response) => {
   const tasks = await taskService.getTasks();
 
+  if (!tasks) {
+    throw { status: 500, message: 'Tasks could not be fetched' };
+  }
+
   res.status(200).json({
     data: tasks,
     message: 'Tasks fetched successfully'
@@ -17,12 +21,16 @@ export const getTasks = async (req: Request, res: Response) => {
 // Create a new task
 export const createTask = async (req: Request, res: Response) => {
   const { title } = req.body;
-
+  
   if (!title) {
-    return res.status(400).json({ message: 'Title is required' });
+    throw { status: 400, message: 'Title is required' };
   }
 
   const task = await taskService.createTask(title);
+
+  if (!task) {
+    throw { status: 500, message: 'Task could not be created' };
+  }
 
   res.status(201).json({
     data: task,
@@ -38,7 +46,7 @@ export const updateTask = async (req: Request, res: Response) => {
   const updatedTask = await taskService.updateTask(id, completed);
 
   if (!updatedTask) {
-    return res.status(404).json({ message: 'Task not found' });
+    throw { status: 404, message: 'Task not found' };
   }
 
   res.json({
@@ -54,7 +62,7 @@ export const deleteTask = async (req: Request, res: Response) => {
   const deleted = await taskService.deleteTask(id);
 
   if (!deleted) {
-    return res.status(404).json({ message: 'Task not found' });
+    throw { status: 404, message: 'Task is not deleted' };
   }
 
   res.json({
